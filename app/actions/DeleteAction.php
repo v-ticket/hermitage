@@ -33,7 +33,7 @@ class DeleteAction
      * @param \Psr\Http\Message\ResponseInterface      $response
      *
      * @return \Psr\Http\Message\ResponseInterface
-     * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
+     * @throws \livetyping\hermitage\foundation\exceptions\FileNotFoundException
      */
     public function __invoke(string $filename, Request $request, Response $response): Response
     {

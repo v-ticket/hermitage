@@ -10,6 +10,10 @@ namespace livetyping\hermitage\foundation\entities;
 
 use livetyping\hermitage\foundation\Util;
 
+/**
+ * Class File
+ * @package livetyping\hermitage\foundation\entities
+ */
 class File
 {
     /** @var string */

@@ -9,7 +9,7 @@ use livetyping\hermitage\foundation\contracts\images\Storage;
 use livetyping\hermitage\foundation\entities\File;
 
 /**
- * Class StoreImageCommandHandler
+ * Class StoreFileCommandHandler
  *
  * @package livetyping\hermitage\foundation\bus\handlers
  */
@@ -25,7 +25,7 @@ final class StoreFileCommandHandler
     protected $generator;
 
     /**
-     * StoreImageCommandHandler constructor.
+     * StoreFileCommandHandler constructor.
      *
      * @param \livetyping\hermitage\foundation\contracts\images\Storage   $storage
      * @param \livetyping\hermitage\foundation\contracts\images\Processor $processor

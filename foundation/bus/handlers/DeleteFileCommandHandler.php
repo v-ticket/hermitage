@@ -6,7 +6,7 @@ use livetyping\hermitage\foundation\bus\commands\DeleteFileCommand;
 use livetyping\hermitage\foundation\contracts\images\Storage;
 
 /**
- * Class DeleteImageCommandHandler
+ * Class DeleteFileCommandHandler
  *
  * @package livetyping\hermitage\foundation\bus\handlers
  */
@@ -16,7 +16,7 @@ final class DeleteFileCommandHandler
     protected $storage;
 
     /**
-     * DeleteImageCommandHandler constructor.
+     * DeleteFileCommandHandler constructor.
      *
      * @param \livetyping\hermitage\foundation\contracts\images\Storage $storage
      */
@@ -27,10 +27,11 @@ final class DeleteFileCommandHandler
 
     /**
      * @param DeleteFileCommand $command
+     * @throws \livetyping\hermitage\foundation\exceptions\FileNotFoundException
      */
     public function handle(DeleteFileCommand $command)
     {
-        $image = $this->storage->get($command->getPath());
-        $this->storage->delete($image);
+        $file = $this->storage->get($command->getPath());
+        $this->storage->delete($file);
     }
 }

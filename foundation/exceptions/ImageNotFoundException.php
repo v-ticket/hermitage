@@ -2,14 +2,12 @@
 
 namespace livetyping\hermitage\foundation\exceptions;
 
-use Exception;
-
 /**
  * Class ImageNotFoundException
  *
  * @package livetyping\hermitage\foundation\exceptions
  */
-class ImageNotFoundException extends Exception
+class ImageNotFoundException extends FileNotFoundException
 {
     /** @var string */
     protected $path;

@@ -3,7 +3,7 @@
 namespace livetyping\hermitage\foundation\bus\commands;
 
 /**
- * Class StoreImageCommand
+ * Class StoreFileCommand
  *
  * @package livetyping\hermitage\foundation\bus\commands
  */
@@ -19,7 +19,7 @@ final class StoreFileCommand
     protected $path;
 
     /**
-     * StoreImageCommand constructor.
+     * StoreFileCommand constructor.
      *
      * @param string $extension
      * @param string $binary

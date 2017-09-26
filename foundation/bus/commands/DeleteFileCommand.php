@@ -3,7 +3,7 @@
 namespace livetyping\hermitage\foundation\bus\commands;
 
 /**
- * Class DeleteImageCommand
+ * Class DeleteFileCommand
  *
  * @package livetyping\hermitage\foundation\bus\commands
  */
@@ -13,7 +13,7 @@ final class DeleteFileCommand
     protected $path;
 
     /**
-     * DeleteImageCommand constructor.
+     * DeleteFileCommand constructor.
      *
      * @param string $path
      */

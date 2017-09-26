@@ -5,7 +5,7 @@ namespace livetyping\hermitage\foundation\images;
 use livetyping\hermitage\foundation\contracts\images\Storage as StorageContract;
 use livetyping\hermitage\foundation\entities\File;
 use livetyping\hermitage\foundation\entities\Image;
-use livetyping\hermitage\foundation\exceptions\ImageNotFoundException;
+use livetyping\hermitage\foundation\exceptions\FileNotFoundException;
 use League\Flysystem\FilesystemInterface;
 use livetyping\hermitage\foundation\Util;
 
@@ -31,9 +31,9 @@ final class Storage implements StorageContract
 
     /**
      * @param string $path
-     *
      * @return File
-     * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
+     * @throws FileNotFoundException
+     * @throws \League\Flysystem\FileNotFoundException
      */
     public function get(string $path): File
     {
@@ -79,27 +79,27 @@ final class Storage implements StorageContract
     }
 
     /**
-     * @param File $image
+     * @param File $file
      *
-     * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
+     * @throws \livetyping\hermitage\foundation\exceptions\FileNotFoundException
      */
-    public function delete(File $image)
+    public function delete(File $file)
     {
 
-        $this->assertPresent($image->getPath());
+        $this->assertPresent($file->getPath());
 
-        $this->filesystem->deleteDir($image->getDirname());
+        $this->filesystem->deleteDir($file->getDirname());
     }
 
     /**
      * @param string $path
      *
-     * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
+     * @throws \livetyping\hermitage\foundation\exceptions\FileNotFoundException
      */
     protected function assertPresent(string $path)
     {
         if (!$this->has($path)) {
-            throw new ImageNotFoundException($path);
+            throw new FileNotFoundException($path);
         }
     }
 }

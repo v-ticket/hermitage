@@ -15,7 +15,7 @@ interface Storage
      * @param string $path
      *
      * @return File
-     * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
+     * @throws \livetyping\hermitage\foundation\exceptions\FileNotFoundException
      */
     public function get(string $path): File;
 
@@ -37,7 +37,7 @@ interface Storage
      * @param File $file
      *
      * @return void
-     * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
+     * @throws \livetyping\hermitage\foundation\exceptions\FileNotFoundException
      */
     public function delete(File $file);
 }
