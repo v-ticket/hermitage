@@ -3,9 +3,11 @@
 namespace livetyping\hermitage\foundation\images;
 
 use livetyping\hermitage\foundation\contracts\images\Storage as StorageContract;
+use livetyping\hermitage\foundation\entities\File;
 use livetyping\hermitage\foundation\entities\Image;
-use livetyping\hermitage\foundation\exceptions\ImageNotFoundException;
+use livetyping\hermitage\foundation\exceptions\FileNotFoundException;
 use League\Flysystem\FilesystemInterface;
+use livetyping\hermitage\foundation\Util;
 
 /**
  * Class Storage
@@ -29,15 +31,23 @@ final class Storage implements StorageContract
 
     /**
      * @param string $path
-     *
-     * @return \livetyping\hermitage\foundation\entities\Image
-     * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
+     * @return File
+     * @throws FileNotFoundException
+     * @throws \League\Flysystem\FileNotFoundException
      */
-    public function get(string $path): Image
+    public function get(string $path): File
     {
         $this->assertPresent($path);
 
-        $image = new Image(
+        $fileExt = array_shift(explode(':', end(explode('.', $path))));
+
+        if (in_array($fileExt, Util::getSupportedMimeTypes())) {
+            $fileClass = Image::class;
+        } else {
+            $fileClass = File::class;
+        }
+
+        $image = new $fileClass(
             $this->filesystem->read($path),
             $this->filesystem->getMimetype($path),
             $path
@@ -57,38 +67,39 @@ final class Storage implements StorageContract
     }
 
     /**
-     * @param \livetyping\hermitage\foundation\entities\Image $image
+     * @param File $file
      */
-    public function put(Image $image)
+    public function put(File $file)
     {
         $this->filesystem->put(
-            $image->getPath(),
-            $image->getBinary(),
-            ['mimetype' => $image->getMimeType()]
+            $file->getPath(),
+            $file->getBinary(),
+            ['mimetype' => $file->getMimeType()]
         );
     }
 
     /**
-     * @param \livetyping\hermitage\foundation\entities\Image $image
+     * @param File $file
      *
-     * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
+     * @throws \livetyping\hermitage\foundation\exceptions\FileNotFoundException
      */
-    public function delete(Image $image)
+    public function delete(File $file)
     {
-        $this->assertPresent($image->getPath());
 
-        $this->filesystem->deleteDir($image->getDirname());
+        $this->assertPresent($file->getPath());
+
+        $this->filesystem->deleteDir($file->getDirname());
     }
 
     /**
      * @param string $path
      *
-     * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
+     * @throws \livetyping\hermitage\foundation\exceptions\FileNotFoundException
      */
     protected function assertPresent(string $path)
     {
         if (!$this->has($path)) {
-            throw new ImageNotFoundException($path);
+            throw new FileNotFoundException($path);
         }
     }
 }

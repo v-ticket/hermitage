@@ -2,7 +2,7 @@
 
 namespace livetyping\hermitage\foundation\contracts\images;
 
-use livetyping\hermitage\foundation\entities\Image;
+use livetyping\hermitage\foundation\entities\File;
 
 /**
  * Interface Storage
@@ -14,10 +14,10 @@ interface Storage
     /**
      * @param string $path
      *
-     * @return \livetyping\hermitage\foundation\entities\Image
-     * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
+     * @return File
+     * @throws \livetyping\hermitage\foundation\exceptions\FileNotFoundException
      */
-    public function get(string $path): Image;
+    public function get(string $path): File;
 
     /**
      * @param string $path
@@ -27,17 +27,17 @@ interface Storage
     public function has(string $path): bool;
 
     /**
-     * @param \livetyping\hermitage\foundation\entities\Image $image
+     * @param File $file
      *
      * @return void
      */
-    public function put(Image $image);
+    public function put(File $file);
 
     /**
-     * @param \livetyping\hermitage\foundation\entities\Image $image
+     * @param File $file
      *
      * @return void
-     * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
+     * @throws \livetyping\hermitage\foundation\exceptions\FileNotFoundException
      */
-    public function delete(Image $image);
+    public function delete(File $file);
 }

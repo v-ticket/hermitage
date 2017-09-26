@@ -2,7 +2,6 @@
 
 use livetyping\hermitage\app\middleware\Authenticate;
 use function DI\env;
-use function DI\get;
 use function DI\object;
 
 return [

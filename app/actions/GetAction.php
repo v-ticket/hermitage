@@ -27,7 +27,7 @@ class GetAction
      * GetAction constructor.
      *
      * @param \livetyping\hermitage\foundation\contracts\images\Storage $storage
-     * @param \SimpleBus\Message\Bus\MessageBus    $bus
+     * @param \SimpleBus\Message\Bus\MessageBus $bus
      */
     public function __construct(Storage $storage, MessageBus $bus)
     {
@@ -36,34 +36,38 @@ class GetAction
     }
 
     /**
-     * @param string                                   $filename
+     * @param string $filename
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface      $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @return \Psr\Http\Message\ResponseInterface
-     * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
+     * @throws \livetyping\hermitage\foundation\exceptions\FileNotFoundException
      */
     public function __invoke(string $filename, Request $request, Response $response): Response
     {
-        $this->prepare($filename);
-        $image = $this->storage->get($filename);
-
+        $fileExt = array_shift(explode(':', end(explode('.', $filename))));
+        if (in_array($fileExt, Util::getSupportedMimeTypes())) {
+            $this->prepareImage($filename);
+        } else {
+            $filename = explode('.', $filename);
+            $filename[count($filename)-1] = $fileExt;
+            $filename = implode('.', $filename);
+        }
+        $file = $this->storage->get($filename);
         $body = new Body(fopen('php://temp', 'r+'));
-        $body->write($image->getBinary());
+        $body->write($file->getBinary());
 
-        return $response->withHeader('Content-Type', $image->getMimeType())->withBody($body);
+        return $response->withHeader('Content-Type', $file->getMimeType())->withBody($body);
     }
 
     /**
      * @param string $filename
-     *
-     * @return \livetyping\hermitage\foundation\entities\Image
      * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
      */
-    protected function prepare(string $filename)
+    protected function prepareImage(string $filename)
     {
         if (!Util::isOriginal($filename) && !$this->storage->has($filename)) {
-            $this->makeVersion($filename);
+            $this->makeImageVersion($filename);
         }
     }
 
@@ -72,7 +76,7 @@ class GetAction
      *
      * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
      */
-    protected function makeVersion(string $filename)
+    protected function makeImageVersion(string $filename)
     {
         $original = Util::original($filename);
         $command = new MakeImageVersionCommand($original, Util::version($filename));

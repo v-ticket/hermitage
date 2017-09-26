@@ -20,66 +20,67 @@ use function DI\object;
 use function DI\string;
 
 return [
-    'images.versions' => [
-        'mini' => [
-            'type' => 'resize',
+    'images.versions'                               => [
+        'mini'  => [
+            'type'   => 'resize',
             'height' => 200,
-            'width' => 200,
+            'width'  => 200,
         ],
         'small' => [
-            'type' => 'resize',
+            'type'   => 'resize',
             'height' => 400,
-            'width' => 400,
+            'width'  => 400,
         ],
         'thumb' => [
-            'type' => 'fit',
+            'type'   => 'fit',
             'height' => 100,
-            'width' => 100,
+            'width'  => 100,
         ],
     ],
-    'images.optimization-params' => ['maxHeight' => 800, 'maxWidth' => 800],
-    'images.manipulator-map' => [],
-    'images.manager-config' => ['driver' => 'gd'],
+    'images.optimization-params'                    => ['maxHeight' => 800, 'maxWidth' => 800],
+    'images.manipulator-map'                        => [],
+    'images.manager-config'                         => ['driver' => 'gd'],
 
     // processor
-    'images.processor.manager' => object(ImageManager::class)->constructor(get('images.manager-config')),
-    'images.processor' => object(Processor::class)
+    'images.processor.manager'                      => object(ImageManager::class)
+        ->constructor(get('images.manager-config')),
+    'images.processor'                              => object(Processor::class)
         ->constructor(get('images.processor.manager'))
         ->method('addManipulatorMap', get('images.manipulator-map'))
         ->method('setVersions', get('images.versions'))
         ->method('setOptimizationParams', get('images.optimization-params')),
-    ProcessorContract::class => get('images.processor'),
+    ProcessorContract::class                        => get('images.processor'),
 
     // generator
-    'images.generator' => object(Generator::class),
-    GeneratorContract::class => get('images.generator'),
+    'images.generator'                              => object(Generator::class),
+    GeneratorContract::class                        => get('images.generator'),
 
     // storage
-    'images.storage.adapter' => env('STORAGE_ADAPTER', 'local'),
-    'images.storage' => function (ContainerInterface $c) {
+    'images.storage.adapter'                        => env('STORAGE_ADAPTER', 'local'),
+    'images.storage'                                => function (ContainerInterface $c) {
         $adapter = $c->get('images.storage.adapter');
         $adapter = $c->get("images.storage.adapters.{$adapter}");
         $adapter = new CachedAdapter($adapter, new Memory());
 
         return new Storage(new Filesystem($adapter));
     },
-    StorageContract::class => get('images.storage'),
+    StorageContract::class                          => get('images.storage'),
 
     // local adapter
-    'images.storage.adapters.local' => object(Local::class)->constructor(string('{storage-dir}/images')),
+    'images.storage.adapters.local'                 => object(Local::class)->constructor(string('{storage-dir}/')),
 
     // aws s3 adapter
-    'images.storage.adapters.s3' => object(AwsS3Adapter::class)
+    'images.storage.adapters.s3'                    => object(AwsS3Adapter::class)
         ->constructor(get('images.storage.adapters.s3.client'), env('STORAGE_S3_BUCKET')),
-    'images.storage.adapters.s3.client' => object(S3Client::class)
+    'images.storage.adapters.s3.client'             => object(S3Client::class)
         ->constructor(get('images.storage.adapters.s3.client-config')),
-    'images.storage.adapters.s3.client-config' => [
-        'version' => '2006-03-01',
-        'region' => env('STORAGE_S3_REGION'),
+    'images.storage.adapters.s3.client-config'      => [
+        'version'     => '2006-03-01',
+        'region'      => env('STORAGE_S3_REGION'),
         'credentials' => get('images.storage.adapters.s3.client-credentials'),
     ],
     'images.storage.adapters.s3.client-credentials' => [
-        'key' => env('STORAGE_S3_KEY'),
+        'key'    => env('STORAGE_S3_KEY'),
         'secret' => env('STORAGE_S3_SECRET'),
     ],
 ];

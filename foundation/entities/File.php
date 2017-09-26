@@ -1,15 +1,20 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: gleb.dresviannikov@gmail.com
+ * Date: 9/25/2017
+ * Time: 02:14
+ */
 
 namespace livetyping\hermitage\foundation\entities;
 
 use livetyping\hermitage\foundation\Util;
 
 /**
- * Class Image
- *
+ * Class File
  * @package livetyping\hermitage\foundation\entities
  */
-final class Image extends File
+class File
 {
     /** @var string */
     protected $name;
@@ -24,26 +29,22 @@ final class Image extends File
     protected $extension;
 
     /** @var string */
-    protected $version;
-
-    /** @var string */
     protected $binary;
+
 
     /**
      * Image constructor.
      *
      * @param string $binary
-     * @param string $mimeType
+     * @param string $extension
      * @param string $path
      */
-    public function __construct(string $binary, string $mimeType, string $path)
+    public function __construct(string $binary, string $extension, string $path)
     {
         $this->binary = $binary;
-        $this->mimeType = $mimeType;
+        $this->extension = $extension;
         $this->name = Util::name($path);
         $this->dirname = Util::dirname($path);
-        $this->version = Util::version($path);
-        $this->extension = Util::determineExtensionByMimeType($mimeType);
     }
 
     /**
@@ -65,14 +66,6 @@ final class Image extends File
     /**
      * @return string
      */
-    public function getVersion(): string
-    {
-        return (string)$this->version;
-    }
-
-    /**
-     * @return string
-     */
     public function getDirname(): string
     {
         return (string)$this->dirname;
@@ -86,23 +79,7 @@ final class Image extends File
         return Util::path(
             (string)$this->dirname,
             (string)$this->name,
-            (string)$this->extension,
-            (string)$this->version
+            (string)$this->extension
         );
-    }
-
-    /**
-     * @param string $binary
-     * @param string $version
-     *
-     * @return \livetyping\hermitage\foundation\entities\Image
-     */
-    public function modify(string $binary, string $version = null): Image
-    {
-        $clone = clone $this;
-        $clone->binary = $binary;
-        $clone->version = $version ?? $clone->version;
-
-        return $clone;
     }
 }

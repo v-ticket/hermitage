@@ -2,7 +2,7 @@
 
 namespace livetyping\hermitage\app\actions;
 
-use livetyping\hermitage\foundation\bus\commands\DeleteImageCommand;
+use livetyping\hermitage\foundation\bus\commands\DeleteFileCommand;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use SimpleBus\Message\Bus\MessageBus;
@@ -33,13 +33,12 @@ class DeleteAction
      * @param \Psr\Http\Message\ResponseInterface      $response
      *
      * @return \Psr\Http\Message\ResponseInterface
-     * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
+     * @throws \livetyping\hermitage\foundation\exceptions\FileNotFoundException
      */
     public function __invoke(string $filename, Request $request, Response $response): Response
     {
-        $command = new DeleteImageCommand($filename);
+        $command = new DeleteFileCommand($filename);
         $this->bus->handle($command);
-
         return $response->withStatus(204);
     }
 }

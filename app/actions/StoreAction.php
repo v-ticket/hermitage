@@ -3,6 +3,7 @@
 namespace livetyping\hermitage\app\actions;
 
 use livetyping\hermitage\app\exceptions\BadRequestException;
+use livetyping\hermitage\foundation\bus\commands\StoreFileCommand;
 use livetyping\hermitage\foundation\bus\commands\StoreImageCommand;
 use livetyping\hermitage\foundation\Util;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -19,6 +20,8 @@ class StoreAction
     /** @var \SimpleBus\Message\Bus\MessageBus */
     protected $bus;
 
+    protected $container;
+
     /**
      * StoreAction constructor.
      *
@@ -31,7 +34,7 @@ class StoreAction
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Slim\Http\Response                      $response
+     * @param \Slim\Http\Response $response
      *
      * @return \Slim\Http\Response
      * @throws \livetyping\hermitage\app\exceptions\BadRequestException
@@ -40,12 +43,17 @@ class StoreAction
     {
         $mime = (string)current($request->getHeader('Content-Type'));
         $binary = (string)$request->getBody();
-
-        if (empty($mime) || empty($binary) || !in_array($mime, Util::supportedMimeTypes())) {
-            throw new BadRequestException('Invalid mime-type or body.');
+        $extension = $request->getHeaderLine('extension');
+        if (empty($binary)) {
+            throw new BadRequestException('Invalid body.');
+        } elseif (!empty($mime) && in_array($mime, Util::supportedMimeTypes())) {
+            $command = new StoreImageCommand($mime, $binary);
+        } elseif (!empty($extension)) {
+            $command = new StoreFileCommand($extension, $binary);
+        } else {
+            throw new BadRequestException('Invalid mime-type or extension');
         }
 
-        $command = new StoreImageCommand($mime, $binary);
         $this->bus->handle($command);
 
         return $response->withStatus(201)->withJson(['filename' => $command->getPath()]);

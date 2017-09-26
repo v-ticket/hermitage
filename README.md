@@ -127,6 +127,10 @@ livetyping\hermitage\bootstrap\app($sources)->run();
 
 Hermitage provides a simple API so you could upload, download and delete your images.
 
+* Or any other files
+* No version system for files
+* To save File via api - 'extension' variable should be present in the head
+
 ### Signing write requests
 
 To write to Hermitage a user agent will have to be specified by two request headers: 

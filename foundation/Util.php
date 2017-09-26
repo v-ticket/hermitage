@@ -135,6 +135,14 @@ final class Util
     }
 
     /**
+     * @return array
+     */
+    public static function getSupportedMimeTypes(): array
+    {
+        return self::$mimeTypes;
+    }
+
+    /**
      * @param string $path
      *
      * @return array

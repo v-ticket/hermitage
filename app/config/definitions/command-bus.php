@@ -17,11 +17,15 @@ return [
     'command-bus.command-handler-map' => [
         commands\StoreImageCommand::class => handlers\StoreImageCommandHandler::class,
         commands\MakeImageVersionCommand::class => handlers\MakeImageVersionCommandHandler::class,
-        commands\DeleteImageCommand::class => handlers\DeleteImageCommandHandler::class,
+
+        commands\StoreFileCommand::class => handlers\StoreFileCommandHandler::class,
+        commands\DeleteFileCommand::class => handlers\DeleteFileCommandHandler::class,
     ],
 
     // command handlers
     handlers\StoreImageCommandHandler::class => object(handlers\StoreImageCommandHandler::class),
     handlers\MakeImageVersionCommandHandler::class => object(handlers\MakeImageVersionCommandHandler::class),
-    handlers\DeleteImageCommandHandler::class => object(handlers\DeleteImageCommandHandler::class),
+
+    handlers\StoreFileCommandHandler::class => object(handlers\StoreFileCommandHandler::class),
+    handlers\DeleteFileCommandHandler::class => object(handlers\DeleteFileCommandHandler::class),
 ];

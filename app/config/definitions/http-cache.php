@@ -2,7 +2,6 @@
 
 use Slim\HttpCache\Cache;
 use function DI\env;
-use function DI\get;
 use function DI\object;
 
 return [
