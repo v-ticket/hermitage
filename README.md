@@ -129,7 +129,7 @@ Hermitage provides a simple API so you could upload, download and delete your im
 
 * Or any other files
 * No version system for files
-* To save File via api 'extension' variable should be present in the header
+* To save File via api - 'extension' variable should be present in the head
 
 ### Signing write requests
 
