@@ -66,7 +66,7 @@ return [
     StorageContract::class => get('images.storage'),
 
     // local adapter
-    'images.storage.adapters.local' => object(Local::class)->constructor(string('{storage-dir}/images')),
+    'images.storage.adapters.local' => object(Local::class)->constructor(string('{storage-dir}/')),
 
     // aws s3 adapter
     'images.storage.adapters.s3' => object(AwsS3Adapter::class)

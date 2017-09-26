@@ -2,8 +2,6 @@
 
 namespace livetyping\hermitage\app\exceptions;
 
-use Exception;
-
 /**
  * Class HttpException
  *

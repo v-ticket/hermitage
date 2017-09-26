@@ -41,7 +41,6 @@ final class MakeImageVersionCommandHandler
     {
         $image = $this->storage->get($command->getPathToOriginal());
         $image = $this->processor->make($image, $command->getVersion());
-
         $this->storage->put($image);
     }
 }

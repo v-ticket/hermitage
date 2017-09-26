@@ -27,7 +27,7 @@ class GetAction
      * GetAction constructor.
      *
      * @param \livetyping\hermitage\foundation\contracts\images\Storage $storage
-     * @param \SimpleBus\Message\Bus\MessageBus    $bus
+     * @param \SimpleBus\Message\Bus\MessageBus $bus
      */
     public function __construct(Storage $storage, MessageBus $bus)
     {
@@ -36,18 +36,25 @@ class GetAction
     }
 
     /**
-     * @param string                                   $filename
+     * @param string $filename
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface      $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @return \Psr\Http\Message\ResponseInterface
      * @throws \livetyping\hermitage\foundation\exceptions\ImageNotFoundException
      */
     public function __invoke(string $filename, Request $request, Response $response): Response
     {
-        $this->prepare($filename);
+        $fileExt = array_shift(explode(':', end(explode('.', $filename))));
+        if (in_array($fileExt, Util::getSupportedMimeTypes())) {
+            $this->prepare($filename);
+        } else {
+            $filename = explode('.', $filename);
+            end($filename);
+            $filename[key($filename)] = $fileExt;
+            $filename = implode('.', $filename);
+        }
         $image = $this->storage->get($filename);
-
         $body = new Body(fopen('php://temp', 'r+'));
         $body->write($image->getBinary());
 
