@@ -21,6 +21,7 @@ class StoreAction
     protected $bus;
 
     protected $container;
+
     /**
      * StoreAction constructor.
      *
@@ -47,7 +48,7 @@ class StoreAction
             throw new BadRequestException('Invalid body.');
         } elseif (!empty($mime) && in_array($mime, Util::supportedMimeTypes())) {
             $command = new StoreImageCommand($mime, $binary);
-        } elseif(!empty($extension)) {
+        } elseif (!empty($extension)) {
             $command = new StoreFileCommand($extension, $binary);
         } else {
             throw new BadRequestException('Invalid mime-type or extension');

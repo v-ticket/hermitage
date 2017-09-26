@@ -78,5 +78,4 @@ class File
             (string)$this->extension
         );
     }
-
 }
