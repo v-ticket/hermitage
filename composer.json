@@ -1,5 +1,5 @@
 {
-    "name": "livetyping/hermitage",
+    "name": "v-ticket/hermitage",
     "description": "RESTful image server",
     "license": "MIT",
     "keywords": ["image", "storage"],
